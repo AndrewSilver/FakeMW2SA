@@ -7,8 +7,6 @@ namespace FakeMW2SA
 {
     class HttpClient
     {
-        private Object thisLock = new Object();
-
         public static void Run()
         {
             if (!HttpListener.IsSupported)
@@ -27,7 +25,7 @@ namespace FakeMW2SA
                 Console.WriteLine("Listening on http://localhost:" + Program.port + "/" + "and http://127.0.0.1:" + Program.port + "/");
                 while (true)
                 {
-                    string responseString = String.Format(Utils.ReadEmbeddedResrourceAsString("ResponseTemplate.html"), FakeMW2SA.Program.csrf);
+                    string responseString = String.Format(Utils.ReadEmbeddedResrourceAsString("ResponseTemplate.html"), Program.csrf);
                     responseString = responseString.Replace("#URL#", localhostURI);
                     HttpListenerContext context = listener.GetContext();
                     HttpListenerRequest request = context.Request;
@@ -40,26 +38,26 @@ namespace FakeMW2SA
                         var assetName = request.Url?.Segments[1] + request.Url?.Segments[2];
                         responseString = Utils.ReadEmbeddedResrourceAsString(assetName.Replace("/", "."));
                     }
-                    else if (request.QueryString.GetValues("action") != null && request.QueryString.GetValues("csrf") != null && request.QueryString.GetValues("csrf")[0] == FakeMW2SA.Program.csrf.ToString())
+                    else if (request.QueryString.GetValues("action") != null && request.QueryString.GetValues("csrf") != null && request.QueryString.GetValues("csrf")[0] == Program.csrf.ToString())
                     {
                         var action = request.QueryString.GetValues("action")[0];
                         switch (action)
                         {
                             case "players":
                                 response.ContentType = "application/json";
-                                responseString = JsonConvert.SerializeObject(new FakeMW2SA.JsonOutput());
+                                responseString = JsonConvert.SerializeObject(new JsonOutput());
                                 break;
                             case "ban":
-                                FakeMW2SA.Utils.Ban(request.QueryString.GetValues("ip")[0]);
+                                Utils.Ban(request.QueryString.GetValues("ip")[0]);
                                 break;
                             case "unban":
-                                FakeMW2SA.Utils.Unban(request.QueryString.GetValues("ip")[0]);
+                                Utils.Unban(request.QueryString.GetValues("ip")[0]);
                                 break;
                             case "clearbans":
-                                FakeMW2SA.Utils.Clearfirewall();
+                                Utils.Clearfirewall();
                                 break;
                             case "host":
-                                responseString = JsonConvert.SerializeObject(new FakeMW2SA.JsonOutput());
+                                responseString = JsonConvert.SerializeObject(new JsonOutput());
                                 break;
                             default:
                                 break;

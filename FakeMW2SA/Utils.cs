@@ -219,9 +219,14 @@ namespace FakeMW2SA
             try
             {
                 using (Stream stream = assembly.GetManifestResourceStream($"FakeMW2SA.{resourceName}"))
-                using (StreamReader reader = new StreamReader(stream))
                 {
-                    return reader.ReadToEnd();
+                    if (stream == null)
+                        return string.Empty;
+
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        return reader.ReadToEnd();
+                    }
                 }
             }
             catch
