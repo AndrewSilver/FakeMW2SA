@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 
 namespace FakeMW2SA
 {
@@ -58,7 +59,7 @@ namespace FakeMW2SA
                 Console.WriteLine("route add " + ip + " 12.34.56.78");
                 RunCommand("route add " + ip + " 12.34.56.78 IF 1");
             }
-                
+
         }
         public static int GetEpochSeconds()
         {
@@ -176,9 +177,9 @@ namespace FakeMW2SA
                             while (enumerator2.MoveNext())
                             {
                                 JToken each = enumerator2.Current;
-                                
+
                                 PlayerModel player = Program.players.Find((PlayerModel x) => x.steamid == each["steamid"].ToString());
-                                if (each["communityvisibilitystate"].Type != JTokenType.Null) {player.communityvisibilitystate = Convert.ToInt32(each["communityvisibilitystate"]);}
+                                if (each["communityvisibilitystate"].Type != JTokenType.Null) { player.communityvisibilitystate = Convert.ToInt32(each["communityvisibilitystate"]); }
                                 if (each["profilestate"].Type != JTokenType.Null) { player.profilestate = Convert.ToInt32(each["profilestate"]); }
                                 if (each["personaname"].Type != JTokenType.Null) { player.personaname = each["personaname"].ToString(); }
                                 if (each["profileurl"].Type != JTokenType.Null) { player.profileurl = each["profileurl"].ToString(); }
@@ -208,6 +209,24 @@ namespace FakeMW2SA
                     Console.WriteLine(e);
                     Console.WriteLine(url);
                 }
+            }
+        }
+
+        public static string ReadEmbeddedResrourceAsString(string resourceName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            try
+            {
+                using (Stream stream = assembly.GetManifestResourceStream($"FakeMW2SA.{resourceName}"))
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+            catch
+            {
+                return string.Empty;
             }
         }
     }

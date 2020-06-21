@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html lang='en'>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+<head>
+    <link rel='stylesheet' href='#URL#assets/bootstrap.min.css' integrity='sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb' crossorigin='anonymous'>
+    <script>var csrf = {0}</script>
+</head>
+<body>
+    <div class='wrapper' style='margin:auto;'>
+        <nav class='navbar navbar-expand-lg navbar-light bg-light'>
+            <a class='navbar-brand' href='#'>FakeMW2SA</a>
+            <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
+                <span class='navbar-toggler-icon'></span>
+            </button>
+
+            <div class='collapse navbar-collapse' id='navbarSupportedContent'>
+                <ul class='navbar-nav mr-auto'>
+                    <li class='nav-item active'>
+                        <a class='nav-link' href='#'>Home <span class='sr-only'>(current)</span></a>
+                    </li>
+                    <li class='nav-item'>
+                        <a class='nav-link' href='#' onclick="" memberjointoggle()""> Memberjoin</a>
+                    </li>
+                    <li class='nav-item dropdown'>
+                        <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                            IPs
+                        </a>
+                        <div id='iplist' class='dropdown-menu' aria-labelledby='navbarDropdown'>
+
+                        </div>
+                    </li>
+                    <li class='nav-item dropdown'>
+                        <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                            Stats
+                        </a>
+                        <div class='dropdown-menu' aria-labelledby='navbarDropdown'>
+                            <a class='dropdown-item' id='apicalls' href='#'>API calls</a>
+                            <a class='dropdown-item' id='partystatepackets' href='#'>partystate packets</a>
+                            <a class='dropdown-item' id='memberjoinpackets' href='#'>Memberjoin packets</a>
+                        </div>
+                    </li>
+                    <li class='nav-item'>
+                        <a class='nav-link' href='#'>About</a>
+                    </li>
+                    <li class='nav-item'>
+
+                        <a class='nav-link' href='http://localhost:" + Program.port + "/" + "/?action=players&csrf=" + FakeMW2SA.Program.csrf + @"'>JSON</a>
+                    </li>
+                </ul>
+                <span class='navbar-text'>Host =&nbsp;</span><span class='navbar-text' id='host'>0.0.0.0</span>
+            </div>
+        </nav>
+        <div id='playertable'></div>
+    </div>
+    <script src='#URL#assets/jquery.min.js'></script>
+    <script src='#URL#assets/jquery-ui.min.js'></script>
+    <script src='#URL#assets/popper.min.js' integrity='sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh' crossorigin='anonymous'></script>
+    <script src='#URL#assets/bootstrap.min.js' integrity='sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ' crossorigin='anonymous'></script>
+    <script src='#URL#assets/client.js'></script>
+    <script src='#URL#assets/moment.js'></script>
+    <link rel='stylesheet' type='text/css' href='#URL#assets/site.css'>
+</body>
+</html>
