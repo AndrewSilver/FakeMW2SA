@@ -2,9 +2,25 @@
 using System;
 using System.Net;
 using System.Threading;
+using System.Web;
 
 namespace FakeMW2SA
 {
+    public static class HttpResponseExtentions
+    {
+        public static void WriteResponse(this HttpListenerResponse response, string content, string mimeType = null)
+        {
+            byte[] buffer = System.Text.Encoding.UTF8.GetBytes(content);
+            response.ContentLength64 = buffer.Length;
+            if (!string.IsNullOrEmpty(mimeType))
+            {
+                response.ContentType = mimeType;
+            }
+            System.IO.Stream output = response.OutputStream;
+            output.Write(buffer, 0, buffer.Length);
+        }
+    }
+
     class HttpClient
     {
         public static void Run()
@@ -26,7 +42,9 @@ namespace FakeMW2SA
                 while (true)
                 {
                     string responseString = String.Format(Utils.ReadEmbeddedResrourceAsString("ResponseTemplate.html"), Program.csrf);
-                    responseString = responseString.Replace("#URL#", localhostURI);
+                    responseString = responseString
+                        .Replace("#URL#", localhostURI)
+                        .Replace("#CSRF#", Program.csrf.ToString());
                     HttpListenerContext context = listener.GetContext();
                     HttpListenerRequest request = context.Request;
                     HttpListenerResponse response = context.Response;
@@ -37,6 +55,9 @@ namespace FakeMW2SA
                     {
                         var assetName = request.Url?.Segments[1] + request.Url?.Segments[2];
                         responseString = Utils.ReadEmbeddedResrourceAsString(assetName.Replace("/", "."));
+                        var mimeType = MimeMapping.GetMimeMapping(assetName);
+                        response.WriteResponse(responseString, mimeType);
+                        continue;
                     }
                     else if (request.QueryString.GetValues("action") != null && request.QueryString.GetValues("csrf") != null && request.QueryString.GetValues("csrf")[0] == Program.csrf.ToString())
                     {
@@ -62,12 +83,9 @@ namespace FakeMW2SA
                             default:
                                 break;
                         }
-                    }
-                    byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
-                    response.ContentLength64 = buffer.Length;
-                    System.IO.Stream output = response.OutputStream;
-                    output.Write(buffer, 0, buffer.Length);
 
+                    }
+                    response.WriteResponse(responseString);
                 }
             }
             catch (HttpListenerException)
